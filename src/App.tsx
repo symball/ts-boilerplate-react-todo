@@ -28,6 +28,7 @@ function App() {
       </div>
       <p className="read-the-docs">
           <LanguageSwitcher />
+          <br />
           {t('date', { date: new Date() })}
       </p>
     </div>
