@@ -1,0 +1,4 @@
+{
+  "Welcome": "欢迎",
+  "date": "今天是 {{date, DATE_HUGE}}"
+}
