@@ -5,16 +5,15 @@ import { initReactI18next } from 'react-i18next';
 
 import { i18nDebug } from '@/lib/config';
 
-i18n
-  .use(Backend)
-  .use(LanguageDetector)
-  .use(initReactI18next)
-  .init({
-    fallbackLng: 'en',
-    debug: i18nDebug,
-    interpolation: {
-      escapeValue: false,
-    },
-  });
-
-export default i18n;
+export const activatei18n = () =>
+  i18n
+    .use(Backend)
+    .use(LanguageDetector)
+    .use(initReactI18next)
+    .init({
+      fallbackLng: 'en',
+      debug: i18nDebug,
+      interpolation: {
+        escapeValue: false,
+      },
+    });

@@ -1,0 +1,268 @@
+openapi: 3.0.0
+tags:
+  - name: users
+    description: Users API
+  - name: posts
+    description: Posts API
+info:
+  title: Symbolic Boilerplate
+  description: An API spec for managing posts
+  version: 1.0.0
+  contact:
+    name: Simon Ball
+    url: 'https://simonball.me'
+    email: contact@simonball.me
+servers:
+  - url: http://localhost:8080
+    description: Local Development
+paths:
+  /login:
+    post:
+      tags:
+        - users
+      summary: Log user in and retrieve JWT token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: OK
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+                example: "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9; Path=/; Max-Age=3600; HttpOnly"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSecurity'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /logout:
+    get:
+      security:
+        - cookieAuth: [ ]
+        - tokenAuth: [ ]
+      tags:
+        - users
+      summary: Log user out
+      responses:
+        '200':
+          description: OK
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+                example: "jwt=; Path=/; Max-Age=0; HttpOnly"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    default: 200
+
+  /posts:
+    parameters:
+      - $ref: "#/components/parameters/Cursor"
+      - $ref: "#/components/parameters/CursorDirection"
+    get:
+      security:
+        - cookieAuth: []
+        - tokenAuth: [ ]
+      tags:
+        - posts
+      summary: Get a listing of posts in system
+      responses:
+        '200':
+          description: Array of post objects
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    default: postsGetNext
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Post'
+                    example:
+                      - id: 1
+                        title: An example post
+                        slug: an-example-post
+                        summary: Symbolic showing the power of OpenAPI
+                        published: true
+                      - id: 2
+                        title: A cold and stormy eve
+                        slug: a-cold-and-stormy-eve
+                        summary: When the weather outside is frightful, the first is so delightful
+                        published: false
+                required:
+                  - message
+                  - data
+
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /posts/{PostId}:
+    parameters:
+      - $ref: '#/components/parameters/PostId'
+    get:
+      security:
+        - cookieAuth: []
+        - tokenAuth: []
+      tags:
+        - posts
+      summary: Get detailed information about a particular post
+      responses:
+        '200':
+          description: Detailed information about one post
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    default: postsGetOne
+                  data:
+                    $ref: '#/components/schemas/Post'
+                required:
+                  - message
+                  - data
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: JWT
+    tokenAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    UserSecurity:
+      title: User Secirity information
+      properties:
+        code:
+          type: integer
+          description: Response code from auth
+          example: 200
+        expire:
+          type: string
+          description: DateTime value for when auth token expires
+          example: "2033-04-28T01:49:28+08:00"
+        token:
+          type: string
+          description: The actual auth token
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODI2MTc3NjgsImlkIjoiYWRtaW4iLCJvcmlnX2lhdCI6MTY4MjYwNjk2OH0.c7bcDuOJ3HI6TC3Ug50-D_WsR1alUxrmag-pQmo1WNU"
+      required:
+        - code
+        - expire
+        - token
+    User:
+      title: User
+      type: object
+      properties:
+        username:
+          type: string
+          description: Username
+        password:
+          type: string
+          description: Password
+      required:
+        - username
+        - password
+    Post:
+      title: Post
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        title:
+          type: string
+          example: An example post
+        slug:
+          type: number
+          example: an-example-post
+        summary:
+          type: string
+          example: Symbolic showing the power of OpenAPI
+        published:
+          type: boolean
+          example: true
+      required:
+        - id
+        - title
+        - slug
+        - summary
+        - published
+  responses:
+    NotFound:
+      description: Item not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 404
+              message:
+                type: string
+                example: Not Found
+    Unauthorized:
+      description: Unauthorized access
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 401
+              message:
+                type: string
+                example: cookie token is empty
+    ServerError:
+      description: Error response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Something went wrong
+  parameters:
+    Cursor:
+      in: query
+      name: cursor
+      description: For pagination use, ID used in pagination cursor
+      required: false
+      schema:
+        type: integer
+        example: 0
+    CursorDirection:
+      in: query
+      name: dir
+      description: Direction for results to search
+      required: false
+      schema:
+        type: string
+        example: asc
+    PostId:
+      name: PostId
+      description: Unique post Identifier code
+      in: path
+      required: true
+      schema:
+        type: integer

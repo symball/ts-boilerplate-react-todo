@@ -1,4 +1,10 @@
 {
-  "Welcome": "Welcome",
-  "date": "Today is {{date, DATE_HUGE}}"
+  "dashboard_title": "Your personal dashboard",
+  "date": "Today is {{date, DATE_HUGE}}",
+  "email_address": "Email Address",
+  "language": "Language",
+  "password": "Password",
+  "sign_in": "Sign In",
+  "username": "Username",
+  "welcome": "Welcome"
 }
