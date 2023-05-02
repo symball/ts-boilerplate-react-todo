@@ -9,11 +9,6 @@
         "generatorName": "typescript-fetch",
         "output": "#{cwd}/src/gen/api",
         "glob": "openapi.{json,yaml}"
-      },
-      "backend-bootstrap": {
-        "generatorName": "go-gin-server",
-        "output": "#{cwd}/vara-backend-artefacts",
-        "glob": "openapi.{json,yaml}"
       }
     }
   }

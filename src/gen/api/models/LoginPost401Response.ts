@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Symbolic Boilerplate
- * An API spec for managing posts
+ * An API spec for managing todo lists
  *
  * The version of the OpenAPI document: 1.0.0
  * Contact: contact@simonball.me

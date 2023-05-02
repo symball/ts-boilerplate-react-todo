@@ -1,12 +1,13 @@
-apis/PostsApi.ts
+.openapi-generator-ignore
+apis/TodoApi.ts
 apis/UsersApi.ts
 apis/index.ts
 index.ts
 models/LoginPost401Response.ts
 models/LogoutGet200Response.ts
-models/Post.ts
-models/PostsGet200Response.ts
-models/PostsPostIdGet200Response.ts
+models/Todo.ts
+models/TodosGet200Response.ts
+models/TodosTodoIdGet200Response.ts
 models/User.ts
 models/UserSecurity.ts
 models/index.ts

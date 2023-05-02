@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Symbolic Boilerplate
- * An API spec for managing posts
+ * An API spec for managing todo lists
  *
  * The version of the OpenAPI document: 1.0.0
  * Contact: contact@simonball.me
@@ -13,37 +13,37 @@
  */
 
 import { exists, mapValues } from '../runtime';
-import type { Post } from './Post';
+import type { Todo } from './Todo';
 import {
-    PostFromJSON,
-    PostFromJSONTyped,
-    PostToJSON,
-} from './Post';
+    TodoFromJSON,
+    TodoFromJSONTyped,
+    TodoToJSON,
+} from './Todo';
 
 /**
  * 
  * @export
- * @interface PostsGet200Response
+ * @interface TodosGet200Response
  */
-export interface PostsGet200Response {
+export interface TodosGet200Response {
     /**
      * 
      * @type {string}
-     * @memberof PostsGet200Response
+     * @memberof TodosGet200Response
      */
     message: string;
     /**
      * 
-     * @type {Array<Post>}
-     * @memberof PostsGet200Response
+     * @type {Array<Todo>}
+     * @memberof TodosGet200Response
      */
-    data: Array<Post>;
+    data: Array<Todo>;
 }
 
 /**
- * Check if a given object implements the PostsGet200Response interface.
+ * Check if a given object implements the TodosGet200Response interface.
  */
-export function instanceOfPostsGet200Response(value: object): boolean {
+export function instanceOfTodosGet200Response(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "message" in value;
     isInstance = isInstance && "data" in value;
@@ -51,22 +51,22 @@ export function instanceOfPostsGet200Response(value: object): boolean {
     return isInstance;
 }
 
-export function PostsGet200ResponseFromJSON(json: any): PostsGet200Response {
-    return PostsGet200ResponseFromJSONTyped(json, false);
+export function TodosGet200ResponseFromJSON(json: any): TodosGet200Response {
+    return TodosGet200ResponseFromJSONTyped(json, false);
 }
 
-export function PostsGet200ResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): PostsGet200Response {
+export function TodosGet200ResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): TodosGet200Response {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
         'message': json['message'],
-        'data': ((json['data'] as Array<any>).map(PostFromJSON)),
+        'data': ((json['data'] as Array<any>).map(TodoFromJSON)),
     };
 }
 
-export function PostsGet200ResponseToJSON(value?: PostsGet200Response | null): any {
+export function TodosGet200ResponseToJSON(value?: TodosGet200Response | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -76,7 +76,7 @@ export function PostsGet200ResponseToJSON(value?: PostsGet200Response | null): a
     return {
         
         'message': value.message,
-        'data': ((value.data as Array<any>).map(PostToJSON)),
+        'data': ((value.data as Array<any>).map(TodoToJSON)),
     };
 }
 

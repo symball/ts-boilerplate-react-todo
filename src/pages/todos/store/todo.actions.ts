@@ -2,7 +2,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import { PostsApi } from '@api';
 
-import { authAtom, postDetails } from '.';
+import { authAtom, postDetails } from '@store';
 
 export { useBuildingsActions };
 

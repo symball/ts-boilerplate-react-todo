@@ -2,11 +2,11 @@ openapi: 3.0.0
 tags:
   - name: users
     description: Users API
-  - name: posts
-    description: Posts API
+  - name: todo
+    description: Todo API
 info:
   title: Symbolic Boilerplate
-  description: An API spec for managing posts
+  description: An API spec for managing todo lists
   version: 1.0.0
   contact:
     name: Simon Ball
@@ -66,20 +66,17 @@ paths:
                     type: integer
                     default: 200
 
-  /posts:
-    parameters:
-      - $ref: "#/components/parameters/Cursor"
-      - $ref: "#/components/parameters/CursorDirection"
+  /todos:
     get:
       security:
         - cookieAuth: []
         - tokenAuth: [ ]
       tags:
-        - posts
-      summary: Get a listing of posts in system
+        - todo
+      summary: Get a listing of todo in system
       responses:
         '200':
-          description: Array of post objects
+          description: Array of todo objects
           content:
             application/json:
               schema:
@@ -87,41 +84,41 @@ paths:
                 properties:
                   message:
                     type: string
-                    default: postsGetNext
+                    default: todoListGet
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Post'
+                      $ref: '#/components/schemas/Todo'
                     example:
                       - id: 1
-                        title: An example post
-                        slug: an-example-post
-                        summary: Symbolic showing the power of OpenAPI
-                        published: true
+                        title: Create ToDo App
+                        slug: create-todo-app
+                        summary: Create a system for demonstrating how to build a todo list
+                        content: The architecture involved in creating a todo list is to demonstrate how to...
+                        complete: true
                       - id: 2
-                        title: A cold and stormy eve
-                        slug: a-cold-and-stormy-eve
-                        summary: When the weather outside is frightful, the first is so delightful
-                        published: false
+                        title: Write article about ToDo
+                        slug: write-article-about-todo
+                        summary: It's all well and good creating a system to demonstrate how to build apps but...
+                        complete: false
                 required:
                   - message
                   - data
-
         '401':
           $ref: '#/components/responses/Unauthorized'
-  /posts/{PostId}:
+  /todos/{TodoId}:
     parameters:
-      - $ref: '#/components/parameters/PostId'
+      - $ref: '#/components/parameters/TodoId'
     get:
       security:
         - cookieAuth: []
         - tokenAuth: []
       tags:
-        - posts
-      summary: Get detailed information about a particular post
+        - todo
+      summary: Get detailed information about a particular todo
       responses:
         '200':
-          description: Detailed information about one post
+          description: Detailed information about one todo
           content:
             application/json:
               schema:
@@ -129,9 +126,9 @@ paths:
                 properties:
                   message:
                     type: string
-                    default: postsGetOne
+                    default: todosGetOne
                   data:
-                    $ref: '#/components/schemas/Post'
+                    $ref: '#/components/schemas/Todo'
                 required:
                   - message
                   - data
@@ -180,8 +177,8 @@ components:
       required:
         - username
         - password
-    Post:
-      title: Post
+    Todo:
+      title: Todo
       type: object
       properties:
         id:
@@ -189,14 +186,17 @@ components:
           example: 1
         title:
           type: string
-          example: An example post
+          example: An example todo
         slug:
           type: number
-          example: an-example-post
+          example: an-example-todo
         summary:
           type: string
           example: Symbolic showing the power of OpenAPI
-        published:
+        content:
+          type: string
+          example: This is a much longer description of the todo in markdown
+        complete:
           type: boolean
           example: true
       required:
@@ -204,7 +204,8 @@ components:
         - title
         - slug
         - summary
-        - published
+        - content
+        - complete
   responses:
     NotFound:
       description: Item not found
@@ -243,25 +244,9 @@ components:
                 type: string
                 example: Something went wrong
   parameters:
-    Cursor:
-      in: query
-      name: cursor
-      description: For pagination use, ID used in pagination cursor
-      required: false
-      schema:
-        type: integer
-        example: 0
-    CursorDirection:
-      in: query
-      name: dir
-      description: Direction for results to search
-      required: false
-      schema:
-        type: string
-        example: asc
-    PostId:
-      name: PostId
-      description: Unique post Identifier code
+    TodoId:
+      name: TodoId
+      description: Unique todo Identifier code
       in: path
       required: true
       schema:

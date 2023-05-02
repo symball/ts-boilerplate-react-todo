@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Symbolic Boilerplate
- * An API spec for managing posts
+ * An API spec for managing todo lists
  *
  * The version of the OpenAPI document: 1.0.0
  * Contact: contact@simonball.me
@@ -16,60 +16,67 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface Post
+ * @interface Todo
  */
-export interface Post {
+export interface Todo {
     /**
      * 
      * @type {number}
-     * @memberof Post
+     * @memberof Todo
      */
     id: number;
     /**
      * 
      * @type {string}
-     * @memberof Post
+     * @memberof Todo
      */
     title: string;
     /**
      * 
      * @type {number}
-     * @memberof Post
+     * @memberof Todo
      */
     slug: number;
     /**
      * 
      * @type {string}
-     * @memberof Post
+     * @memberof Todo
      */
     summary: string;
     /**
      * 
-     * @type {boolean}
-     * @memberof Post
+     * @type {string}
+     * @memberof Todo
      */
-    published: boolean;
+    content: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Todo
+     */
+    complete: boolean;
 }
 
 /**
- * Check if a given object implements the Post interface.
+ * Check if a given object implements the Todo interface.
  */
-export function instanceOfPost(value: object): boolean {
+export function instanceOfTodo(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "id" in value;
     isInstance = isInstance && "title" in value;
     isInstance = isInstance && "slug" in value;
     isInstance = isInstance && "summary" in value;
-    isInstance = isInstance && "published" in value;
+    isInstance = isInstance && "content" in value;
+    isInstance = isInstance && "complete" in value;
 
     return isInstance;
 }
 
-export function PostFromJSON(json: any): Post {
-    return PostFromJSONTyped(json, false);
+export function TodoFromJSON(json: any): Todo {
+    return TodoFromJSONTyped(json, false);
 }
 
-export function PostFromJSONTyped(json: any, ignoreDiscriminator: boolean): Post {
+export function TodoFromJSONTyped(json: any, ignoreDiscriminator: boolean): Todo {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -79,11 +86,12 @@ export function PostFromJSONTyped(json: any, ignoreDiscriminator: boolean): Post
         'title': json['title'],
         'slug': json['slug'],
         'summary': json['summary'],
-        'published': json['published'],
+        'content': json['content'],
+        'complete': json['complete'],
     };
 }
 
-export function PostToJSON(value?: Post | null): any {
+export function TodoToJSON(value?: Todo | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -96,7 +104,8 @@ export function PostToJSON(value?: Post | null): any {
         'title': value.title,
         'slug': value.slug,
         'summary': value.summary,
-        'published': value.published,
+        'content': value.content,
+        'complete': value.complete,
     };
 }
 
