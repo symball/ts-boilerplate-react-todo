@@ -16,66 +16,62 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface Todo
+ * @interface TodoUpdate
  */
-export interface Todo {
-    /**
-     * 
-     * @type {number}
-     * @memberof Todo
-     */
-    id: number;
+export interface TodoUpdate {
     /**
      * 
      * @type {string}
-     * @memberof Todo
+     * @memberof TodoUpdate
      */
-    title: string;
+    title?: string;
     /**
      * 
      * @type {string}
-     * @memberof Todo
+     * @memberof TodoUpdate
      */
-    content: string;
+    summary?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TodoUpdate
+     */
+    content?: string;
     /**
      * 
      * @type {boolean}
-     * @memberof Todo
+     * @memberof TodoUpdate
      */
-    complete: boolean;
+    complete?: boolean;
 }
 
 /**
- * Check if a given object implements the Todo interface.
+ * Check if a given object implements the TodoUpdate interface.
  */
-export function instanceOfTodo(value: object): boolean {
+export function instanceOfTodoUpdate(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "id" in value;
-    isInstance = isInstance && "title" in value;
-    isInstance = isInstance && "content" in value;
-    isInstance = isInstance && "complete" in value;
 
     return isInstance;
 }
 
-export function TodoFromJSON(json: any): Todo {
-    return TodoFromJSONTyped(json, false);
+export function TodoUpdateFromJSON(json: any): TodoUpdate {
+    return TodoUpdateFromJSONTyped(json, false);
 }
 
-export function TodoFromJSONTyped(json: any, ignoreDiscriminator: boolean): Todo {
+export function TodoUpdateFromJSONTyped(json: any, ignoreDiscriminator: boolean): TodoUpdate {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'id': json['id'],
-        'title': json['title'],
-        'content': json['content'],
-        'complete': json['complete'],
+        'title': !exists(json, 'title') ? undefined : json['title'],
+        'summary': !exists(json, 'summary') ? undefined : json['summary'],
+        'content': !exists(json, 'content') ? undefined : json['content'],
+        'complete': !exists(json, 'complete') ? undefined : json['complete'],
     };
 }
 
-export function TodoToJSON(value?: Todo | null): any {
+export function TodoUpdateToJSON(value?: TodoUpdate | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -84,8 +80,8 @@ export function TodoToJSON(value?: Todo | null): any {
     }
     return {
         
-        'id': value.id,
         'title': value.title,
+        'summary': value.summary,
         'content': value.content,
         'complete': value.complete,
     };

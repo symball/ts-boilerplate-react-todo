@@ -1,13 +1,21 @@
 {
   "$schema": "./node_modules/@openapitools/openapi-generator-cli/config.schema.json",
+  "spaces": 2,
   "generator-cli": {
-    "version": "6.2.1",
+    "version": "6.5.0",
     "supportsES6": true,
     "withSeparateModelsAndApi": true,
     "generators": {
       "frontend-sdk": {
+        "enablePostProcessFile": true,
         "generatorName": "typescript-fetch",
         "output": "#{cwd}/src/gen/api",
+        "glob": "openapi.{json,yaml}"
+      },
+      "backend-bootstrap": {
+        "enablePostProcessFile": true,
+        "generatorName": "go-gin-server",
+        "output": "#{cwd}/backend-artefacts",
         "glob": "openapi.{json,yaml}"
       }
     }

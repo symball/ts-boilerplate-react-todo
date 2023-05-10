@@ -16,66 +16,49 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface Todo
+ * @interface TodosPostRequest
  */
-export interface Todo {
-    /**
-     * 
-     * @type {number}
-     * @memberof Todo
-     */
-    id: number;
+export interface TodosPostRequest {
     /**
      * 
      * @type {string}
-     * @memberof Todo
+     * @memberof TodosPostRequest
      */
     title: string;
     /**
      * 
      * @type {string}
-     * @memberof Todo
+     * @memberof TodosPostRequest
      */
-    content: string;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof Todo
-     */
-    complete: boolean;
+    content?: string;
 }
 
 /**
- * Check if a given object implements the Todo interface.
+ * Check if a given object implements the TodosPostRequest interface.
  */
-export function instanceOfTodo(value: object): boolean {
+export function instanceOfTodosPostRequest(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "id" in value;
     isInstance = isInstance && "title" in value;
-    isInstance = isInstance && "content" in value;
-    isInstance = isInstance && "complete" in value;
 
     return isInstance;
 }
 
-export function TodoFromJSON(json: any): Todo {
-    return TodoFromJSONTyped(json, false);
+export function TodosPostRequestFromJSON(json: any): TodosPostRequest {
+    return TodosPostRequestFromJSONTyped(json, false);
 }
 
-export function TodoFromJSONTyped(json: any, ignoreDiscriminator: boolean): Todo {
+export function TodosPostRequestFromJSONTyped(json: any, ignoreDiscriminator: boolean): TodosPostRequest {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'id': json['id'],
         'title': json['title'],
-        'content': json['content'],
-        'complete': json['complete'],
+        'content': !exists(json, 'content') ? undefined : json['content'],
     };
 }
 
-export function TodoToJSON(value?: Todo | null): any {
+export function TodosPostRequestToJSON(value?: TodosPostRequest | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -84,10 +67,8 @@ export function TodoToJSON(value?: Todo | null): any {
     }
     return {
         
-        'id': value.id,
         'title': value.title,
         'content': value.content,
-        'complete': value.complete,
     };
 }
 

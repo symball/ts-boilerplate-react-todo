@@ -44,6 +44,9 @@ export const DashboardLayout = ({ children }: { children: JSX.Element }) => {
 
           <Stack direction="row" spacing={2} justifyContent="center">
             <LanguageSwitcher />
+            <Button variant="outlined" component={RouterLink} to="/todos">
+              Overview
+            </Button>
             <Signout />
           </Stack>
         </Toolbar>

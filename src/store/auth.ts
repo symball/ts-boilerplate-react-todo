@@ -2,8 +2,8 @@ import { atom } from 'recoil';
 import { defaultLoginPage } from '@/lib/config';
 
 export const authAtom = atom({
-  key: 'auth',
-  default: localStorage.getItem('auth'),
+  key: 'authExpires',
+  default: localStorage.getItem('authExpires'),
 });
 
 export const loginRedirectAtom = atom({

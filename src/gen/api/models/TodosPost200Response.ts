@@ -23,27 +23,27 @@ import {
 /**
  * 
  * @export
- * @interface TodosTodoIdGet200Response
+ * @interface TodosPost200Response
  */
-export interface TodosTodoIdGet200Response {
+export interface TodosPost200Response {
     /**
      * 
      * @type {string}
-     * @memberof TodosTodoIdGet200Response
+     * @memberof TodosPost200Response
      */
     message: string;
     /**
      * 
      * @type {Todo}
-     * @memberof TodosTodoIdGet200Response
+     * @memberof TodosPost200Response
      */
     data: Todo;
 }
 
 /**
- * Check if a given object implements the TodosTodoIdGet200Response interface.
+ * Check if a given object implements the TodosPost200Response interface.
  */
-export function instanceOfTodosTodoIdGet200Response(value: object): boolean {
+export function instanceOfTodosPost200Response(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "message" in value;
     isInstance = isInstance && "data" in value;
@@ -51,11 +51,11 @@ export function instanceOfTodosTodoIdGet200Response(value: object): boolean {
     return isInstance;
 }
 
-export function TodosTodoIdGet200ResponseFromJSON(json: any): TodosTodoIdGet200Response {
-    return TodosTodoIdGet200ResponseFromJSONTyped(json, false);
+export function TodosPost200ResponseFromJSON(json: any): TodosPost200Response {
+    return TodosPost200ResponseFromJSONTyped(json, false);
 }
 
-export function TodosTodoIdGet200ResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): TodosTodoIdGet200Response {
+export function TodosPost200ResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): TodosPost200Response {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -66,7 +66,7 @@ export function TodosTodoIdGet200ResponseFromJSONTyped(json: any, ignoreDiscrimi
     };
 }
 
-export function TodosTodoIdGet200ResponseToJSON(value?: TodosTodoIdGet200Response | null): any {
+export function TodosPost200ResponseToJSON(value?: TodosPost200Response | null): any {
     if (value === undefined) {
         return undefined;
     }

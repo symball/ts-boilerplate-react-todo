@@ -17,19 +17,40 @@ import * as runtime from '../runtime';
 import type {
   LoginPost401Response,
   TodosGet200Response,
-  TodosTodoIdGet200Response,
+  TodosGetById200Response,
+  TodosPost200Response,
+  TodosPostRequest,
+  TodosPutById200Response,
+  TodosPutByIdRequest,
 } from '../models';
 import {
     LoginPost401ResponseFromJSON,
     LoginPost401ResponseToJSON,
     TodosGet200ResponseFromJSON,
     TodosGet200ResponseToJSON,
-    TodosTodoIdGet200ResponseFromJSON,
-    TodosTodoIdGet200ResponseToJSON,
+    TodosGetById200ResponseFromJSON,
+    TodosGetById200ResponseToJSON,
+    TodosPost200ResponseFromJSON,
+    TodosPost200ResponseToJSON,
+    TodosPostRequestFromJSON,
+    TodosPostRequestToJSON,
+    TodosPutById200ResponseFromJSON,
+    TodosPutById200ResponseToJSON,
+    TodosPutByIdRequestFromJSON,
+    TodosPutByIdRequestToJSON,
 } from '../models';
 
-export interface TodosTodoIdGetRequest {
+export interface TodosGetByIdRequest {
     todoId: number;
+}
+
+export interface TodosPostOperationRequest {
+    todosPostRequest: TodosPostRequest;
+}
+
+export interface TodosPutByIdOperationRequest {
+    todoId: number;
+    todosPutByIdRequest: TodosPutByIdRequest;
 }
 
 /**
@@ -74,9 +95,9 @@ export class TodoApi extends runtime.BaseAPI {
     /**
      * Get detailed information about a particular todo
      */
-    async todosTodoIdGetRaw(requestParameters: TodosTodoIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TodosTodoIdGet200Response>> {
+    async todosGetByIdRaw(requestParameters: TodosGetByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TodosGetById200Response>> {
         if (requestParameters.todoId === null || requestParameters.todoId === undefined) {
-            throw new runtime.RequiredError('todoId','Required parameter requestParameters.todoId was null or undefined when calling todosTodoIdGet.');
+            throw new runtime.RequiredError('todoId','Required parameter requestParameters.todoId was null or undefined when calling todosGetById.');
         }
 
         const queryParameters: any = {};
@@ -98,14 +119,100 @@ export class TodoApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => TodosTodoIdGet200ResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => TodosGetById200ResponseFromJSON(jsonValue));
     }
 
     /**
      * Get detailed information about a particular todo
      */
-    async todosTodoIdGet(requestParameters: TodosTodoIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TodosTodoIdGet200Response> {
-        const response = await this.todosTodoIdGetRaw(requestParameters, initOverrides);
+    async todosGetById(requestParameters: TodosGetByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TodosGetById200Response> {
+        const response = await this.todosGetByIdRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Create a new todo in system
+     */
+    async todosPostRaw(requestParameters: TodosPostOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TodosPost200Response>> {
+        if (requestParameters.todosPostRequest === null || requestParameters.todosPostRequest === undefined) {
+            throw new runtime.RequiredError('todosPostRequest','Required parameter requestParameters.todosPostRequest was null or undefined when calling todosPost.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("tokenAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/todos`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: TodosPostRequestToJSON(requestParameters.todosPostRequest),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => TodosPost200ResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * Create a new todo in system
+     */
+    async todosPost(requestParameters: TodosPostOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TodosPost200Response> {
+        const response = await this.todosPostRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Update a particular todo
+     */
+    async todosPutByIdRaw(requestParameters: TodosPutByIdOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TodosPutById200Response>> {
+        if (requestParameters.todoId === null || requestParameters.todoId === undefined) {
+            throw new runtime.RequiredError('todoId','Required parameter requestParameters.todoId was null or undefined when calling todosPutById.');
+        }
+
+        if (requestParameters.todosPutByIdRequest === null || requestParameters.todosPutByIdRequest === undefined) {
+            throw new runtime.RequiredError('todosPutByIdRequest','Required parameter requestParameters.todosPutByIdRequest was null or undefined when calling todosPutById.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("tokenAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/todos/{TodoId}`.replace(`{${"TodoId"}}`, encodeURIComponent(String(requestParameters.todoId))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: TodosPutByIdRequestToJSON(requestParameters.todosPutByIdRequest),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => TodosPutById200ResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * Update a particular todo
+     */
+    async todosPutById(requestParameters: TodosPutByIdOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TodosPutById200Response> {
+        const response = await this.todosPutByIdRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

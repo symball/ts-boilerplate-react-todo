@@ -1,13 +1,13 @@
 import { useSetRecoilState } from 'recoil';
 
-import { UsersApi, UserSecurity } from '@/gen/api';
+import { Configuration, UsersApi, UserSecurity } from '@/gen/api';
 
 import { authAtom } from '.';
 
 export { useUserActions };
 
 function useUserActions() {
-  const usersApi = new UsersApi();
+  const usersApi = new UsersApi(new Configuration({ credentials: 'include' }));
   const setAuth = useSetRecoilState(authAtom);
 
   return {
@@ -15,9 +15,9 @@ function useUserActions() {
   };
 
   function login(username: string, password: string) {
-    return usersApi.loginPost({ user: { username, password } }).then((user: UserSecurity) => {
-      localStorage.setItem('auth', user.token);
-      setAuth(user.token);
+    return usersApi.loginPost({ user: { username, password } }).then((auth: UserSecurity) => {
+      localStorage.setItem('authExpires', auth.expire);
+      setAuth(auth.expire);
     });
   }
 }

@@ -20,42 +20,43 @@ import {
   Typography,
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { AsyncWrapper, DashboardLayout, RequireAuth, RouterLink } from '@components';
-import { postsListSelector } from '@store';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { Clear, Done } from '@mui/icons-material';
-import { todoListAtom } from '@/pages/todos/store/todo';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { Clear, Comment, Done } from '@mui/icons-material';
+import { filteredTodoListSelector, todoListAtom } from '@/pages/todos/store/todo';
+import { TodoApi, Todo, Configuration } from '@api';
+import { authAtom } from '@store';
+import { TodoFilter } from '@/pages/todos/components/TodoFilter';
+import { replaceItemAtIndex } from '@/lib/array';
+import { TodoItem } from '@/pages/todos/components/TodoItem';
+import { TodoCreator } from '@/pages/todos/components/TodoAdd';
 
 const TodoList = () => {
-  const [todoList, setTodoList] = useRecoilState(todoListAtom);
+  const [effectCalled, setEffectCalled] = useState(0);
+  const todoApi = new TodoApi(new Configuration({ credentials: 'include' }));
+  // const authKey = useRecoilValue(authAtom);
+
+  const setTodoList = useSetRecoilState(todoListAtom);
+  const todoList = useRecoilValue(filteredTodoListSelector);
+
+  useEffect(() => {
+    setEffectCalled(effectCalled + 1);
+    todoApi.todosGet().then(({ data }) => {
+      setTodoList(data);
+    });
+  }, []);
+
   return (
-    <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-      {todoList.map((todo) => (
-        <ListItem
-          key={todo.id}
-          secondaryAction={
-            <IconButton edge="end" aria-label="comments">
-              <CommentIcon />
-            </IconButton>
-          }
-          disablePadding
-        >
-          <ListItemButton role={undefined} onClick={handleToggle(value)} dense>
-            <ListItemIcon>
-              <Checkbox
-                edge="start"
-                checked={checked.indexOf(value) !== -1}
-                tabIndex={-1}
-                disableRipple
-                inputProps={{ 'aria-labelledby': labelId }}
-              />
-            </ListItemIcon>
-            <ListItemText id={labelId} primary={`Line item ${value + 1}`} />
-          </ListItemButton>
-        </ListItem>
-      ))}
-    </List>
+    <React.Fragment>
+      <TodoCreator />
+      <TodoFilter />
+      <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+        {todoList.map((todo) => (
+          <TodoItem todo={todo} key={todo.id} />
+        ))}
+      </List>
+    </React.Fragment>
   );
 };
 

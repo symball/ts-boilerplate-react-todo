@@ -1,35 +1,34 @@
 import { atom, selector } from 'recoil';
 
 import { Todo, TodoApi } from '@api';
-import { authAtom } from '@store';
+import { TodoFilterType } from '@/pages/todos/lib';
 
-const todoApi = new TodoApi();
+export const todoDetailsAtom = atom({
+  key: 'todoDetailsAtom',
+  default: {} as Todo,
+});
+
+export const todoListAtom = atom({
+  key: 'todoListAtom',
+  default: [] as Array<Todo>,
+});
 
 export const todoListFilterAtom = atom({
   key: 'todoListFilterAtom',
-  default: 'all',
+  default: TodoFilterType.ALL,
 });
 
-export const todosFetchSelector = selector({
-  key: 'todosFetchSelector',
-  get: async ({ get }) => {
-    const authKey = get(authAtom);
-    const { data } = await todoApi.todosGet({ headers: { Authorization: `Bearer ${authKey}` } });
-    return data;
-  },
-});
-
-const filteredTodoListSelector = selector({
+export const filteredTodoListSelector = selector({
   key: 'filteredTodoListSelector',
   get: ({ get }) => {
     const filter = get(todoListFilterAtom);
-    const list = get(todosFetchSelector);
+    const list = get(todoListAtom);
 
     switch (filter) {
-      case 'Show Completed':
-        return list.filter((item) => item.isComplete);
-      case 'Show Uncompleted':
-        return list.filter((item) => !item.isComplete);
+      case TodoFilterType.COMPLETE:
+        return list.filter((item) => item.complete);
+      case TodoFilterType.INCOMPLETE:
+        return list.filter((item) => !item.complete);
       default:
         return list;
     }

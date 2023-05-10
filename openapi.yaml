@@ -21,6 +21,7 @@ paths:
       tags:
         - users
       summary: Log user in and retrieve JWT token
+      operationId: loginPost
       requestBody:
         required: true
         content:
@@ -37,7 +38,7 @@ paths:
                 example: "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9; Path=/; Max-Age=3600; HttpOnly"
           content:
             application/json:
-              schema:
+              schema: 
                 $ref: '#/components/schemas/UserSecurity'
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -49,6 +50,7 @@ paths:
       tags:
         - users
       summary: Log user out
+      operationId: logoutGet
       responses:
         '200':
           description: OK
@@ -65,7 +67,6 @@ paths:
                   code:
                     type: integer
                     default: 200
-
   /todos:
     get:
       security:
@@ -74,6 +75,7 @@ paths:
       tags:
         - todo
       summary: Get a listing of todo in system
+      operationId: todosGet
       responses:
         '200':
           description: Array of todo objects
@@ -92,30 +94,55 @@ paths:
                     example:
                       - id: 1
                         title: Create ToDo App
-                        slug: create-todo-app
-                        summary: Create a system for demonstrating how to build a todo list
                         content: The architecture involved in creating a todo list is to demonstrate how to...
                         complete: true
                       - id: 2
                         title: Write article about ToDo
-                        slug: write-article-about-todo
-                        summary: It's all well and good creating a system to demonstrate how to build apps but...
                         complete: false
                 required:
                   - message
                   - data
         '401':
           $ref: '#/components/responses/Unauthorized'
-  /todos/{TodoId}:
-    parameters:
-      - $ref: '#/components/parameters/TodoId'
-    get:
+    post:
       security:
-        - cookieAuth: []
-        - tokenAuth: []
+        - cookieAuth: [ ]
+        - tokenAuth: [ ]
       tags:
         - todo
+      summary: Create a new todo in system
+      operationId: todosPost
+      requestBody:
+        $ref: '#/components/requestBodies/TodoPost'
+      responses:
+        '200':
+          description: Todo objects
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    default: todoPost
+                  data:
+                    $ref: '#/components/schemas/Todo'
+                required:
+                  - message
+                  - data
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /todos/{TodoId}:
+    get:
+      security:
+        - cookieAuth: [ ]
+        - tokenAuth: [ ]
+      tags:
+        - todo
+      parameters:
+        - $ref: '#/components/parameters/TodoId'
       summary: Get detailed information about a particular todo
+      operationId: todosGetById
       responses:
         '200':
           description: Detailed information about one todo
@@ -134,6 +161,37 @@ paths:
                   - data
         '401':
           $ref: '#/components/responses/Unauthorized'
+    put:
+      summary: Update a particular todo
+      operationId: todosPutById
+      security:
+        - cookieAuth: [ ]
+        - tokenAuth: [ ]
+      tags:
+        - todo
+      parameters:
+        - $ref: '#/components/parameters/TodoId'
+      requestBody:
+        $ref: '#/components/requestBodies/TodoUpdate'
+      responses:
+        '200':
+          description: Detailed information about one todo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    default: updateOne
+                  data:
+                    $ref: '#/components/schemas/Todo'
+                required:
+                  - message
+                  - data
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
 components:
   securitySchemes:
     cookieAuth:
@@ -144,9 +202,43 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
+  requestBodies:
+    TodoPost:
+      description: A JSON object containing todo information
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              title:
+                type: string
+                example: An example todo
+              content:
+                type: string
+                example: This is a much longer description of the todo in markdown
+            required:
+              - title
+    TodoUpdate:
+      description: A JSON object containing todo information
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              title:
+                type: string
+                example: An example todo
+              content:
+                type: string
+                example: This is a much longer description of the todo in markdown
+              complete:
+                type: boolean
+                example: true
   schemas:
     UserSecurity:
-      title: User Secirity information
+      title: User Security information
       properties:
         code:
           type: integer
@@ -187,12 +279,6 @@ components:
         title:
           type: string
           example: An example todo
-        slug:
-          type: number
-          example: an-example-todo
-        summary:
-          type: string
-          example: Symbolic showing the power of OpenAPI
         content:
           type: string
           example: This is a much longer description of the todo in markdown
@@ -202,9 +288,24 @@ components:
       required:
         - id
         - title
-        - slug
-        - summary
         - content
+        - complete
+    TodoListing:
+      title: TodoListing
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        title:
+          type: string
+          example: An example todo
+        complete:
+          type: boolean
+          example: true
+      required:
+        - id
+        - title
         - complete
   responses:
     NotFound:

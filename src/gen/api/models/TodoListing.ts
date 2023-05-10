@@ -16,53 +16,46 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface Todo
+ * @interface TodoListing
  */
-export interface Todo {
+export interface TodoListing {
     /**
      * 
      * @type {number}
-     * @memberof Todo
+     * @memberof TodoListing
      */
     id: number;
     /**
      * 
      * @type {string}
-     * @memberof Todo
+     * @memberof TodoListing
      */
     title: string;
     /**
      * 
-     * @type {string}
-     * @memberof Todo
-     */
-    content: string;
-    /**
-     * 
      * @type {boolean}
-     * @memberof Todo
+     * @memberof TodoListing
      */
     complete: boolean;
 }
 
 /**
- * Check if a given object implements the Todo interface.
+ * Check if a given object implements the TodoListing interface.
  */
-export function instanceOfTodo(value: object): boolean {
+export function instanceOfTodoListing(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "id" in value;
     isInstance = isInstance && "title" in value;
-    isInstance = isInstance && "content" in value;
     isInstance = isInstance && "complete" in value;
 
     return isInstance;
 }
 
-export function TodoFromJSON(json: any): Todo {
-    return TodoFromJSONTyped(json, false);
+export function TodoListingFromJSON(json: any): TodoListing {
+    return TodoListingFromJSONTyped(json, false);
 }
 
-export function TodoFromJSONTyped(json: any, ignoreDiscriminator: boolean): Todo {
+export function TodoListingFromJSONTyped(json: any, ignoreDiscriminator: boolean): TodoListing {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -70,12 +63,11 @@ export function TodoFromJSONTyped(json: any, ignoreDiscriminator: boolean): Todo
         
         'id': json['id'],
         'title': json['title'],
-        'content': json['content'],
         'complete': json['complete'],
     };
 }
 
-export function TodoToJSON(value?: Todo | null): any {
+export function TodoListingToJSON(value?: TodoListing | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -86,7 +78,6 @@ export function TodoToJSON(value?: Todo | null): any {
         
         'id': value.id,
         'title': value.title,
-        'content': value.content,
         'complete': value.complete,
     };
 }

@@ -1,5 +1,5 @@
 export const i18nDebug: boolean = !!import.meta.env.I18N_DEBUG || false;
-export const defaultLoginPage: string = import.meta.env.DEFAULT_LOGIN_PAGE || '/dashboard';
+export const defaultLoginPage: string = import.meta.env.DEFAULT_LOGIN_PAGE || '/todos';
 
 export type LanguageDefinition = {
   code: string;
